@@ -53,7 +53,5 @@ jobs:
         IMAGE_TAG=$ECR_REGISTRY/$ECR_REPOSITORY:$SHORT_SHA
         docker push $IMAGE_TAG
 
-    - name: Output ECR image tag
-      run: echo "✅ Docker image pushed to: $ECR_REGISTRY/$ECR_REPOSITORY:$SHORT_SHA"
-
+  
    
