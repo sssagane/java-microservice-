@@ -61,7 +61,7 @@ jobs:
 
     - name: Replace image tag in Kubernetes manifest
       run: |
-        sed -i "s|__TAG__|$SHORT_SHA|g" deployment_manifest/deployment.yaml
+        sed -i "s|__TAG__|$SHORT_SHA|g" deployment_manifest/deployment.yml
 
     - name: Commit updated manifest back to repo
       run: |
