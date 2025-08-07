@@ -3,7 +3,12 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - 'deployment_manifest/deployment.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 env:
   AWS_REGION: ap-south-1
@@ -54,5 +59,14 @@ jobs:
         IMAGE_TAG=$ECR_REGISTRY/$ECR_REPOSITORY:$SHORT_SHA
         docker push $IMAGE_TAG
 
-  
-   
+    - name: Replace image tag in Kubernetes manifest
+      run: |
+        sed -i "s|__TAG__|$SHORT_SHA|g" deployment_manifest/deployment.yaml
+
+    - name: Commit updated manifest back to repo
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add deployment_manifest/deployment.yaml
+        git commit -m "Update image tag to $SHORT_SHA"
+        git push origin main
